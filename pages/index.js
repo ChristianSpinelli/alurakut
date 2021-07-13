@@ -30,7 +30,7 @@ export default class Home extends Component {
   
   async loadPessoas(){
     let  pessoas;
-    await axios.get("https://api.github.com/users/ChristianSpinelli/followers")
+    await axios.get(`https://api.github.com/users/${this.state.githubUser}/followers`)
     .then((res)=>{
       pessoas = res.data
     })
