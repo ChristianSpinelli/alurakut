@@ -23,7 +23,7 @@ function ProfileSideBar(props){
 
 export default function Home(){
   const [ comunidades, setComunidades ] =  useState([{
-    id:new Date().toISOString(),
+    id:'2918912202108',
     title:"Eu odeio acordar cedo", 
     image:"https://alurakut.vercel.app/capa-comunidade-01.jpg"}
   ])
@@ -41,9 +41,9 @@ export default function Home(){
     setPessoas(pessoas)
   }
 
-  useEffect(() =>{
-      loadPessoas(githubUser)
-  })
+  useEffect(()=>{
+    loadPessoas(githubUser)
+  },[])
     
   return (
     <Fragment>
@@ -120,10 +120,10 @@ export default function Home(){
               return(
                 <Fragment>
                   <li key={comunidade.id}>
-                  <a href={`/comunidades/${comunidade.title}`}>
-                    <img src={comunidade.image}></img>
-                    <span>{comunidade.title}</span>
-                  </a>
+                    <a href={`/comunidades/${comunidade.title}`}>
+                      <img src={comunidade.image}></img>
+                      <span>{comunidade.title}</span>
+                    </a>
                   </li>
                 </Fragment>
               )
