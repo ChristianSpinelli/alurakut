@@ -2,7 +2,6 @@ import React, { Fragment, useState, useEffect } from 'react';
 import Box from '../src/components/Box';
 import MainGrid from '../src/components/Maingrid';
 import { AlurakutMenu, OrkutNostalgicIconSet, AlurakutProfileSidebarMenuDefault } from '../src/lib/AlurakutCommons';
-import axios from 'axios';
 import ImageCardList from '../src/components/ImageCardList';
 
 function ProfileSideBar(props){
@@ -34,16 +33,24 @@ export default function Home(){
 
   async function loadPessoas(githubUser){
     let pessoas = []
-    await axios.get(`https://api.github.com/users/${githubUser}/following`)
+    await fetch(`https://api.github.com/users/${githubUser}/following`)
+    //retorna a promisse e converte para json
     .then((res)=>{
-        for(let i = 0; i < res.data.length; i++){
-            let pessoa = {}
-            pessoa.id = res.data[i].login
-            pessoa.title = res.data[i].login
-            pessoa.image = res.data[i].avatar_url
-            pessoas.push(pessoa)
-        }
+      return res.json()       
+    
+    //retorna o dado convertido
+    }).then((res) => {  
+      for(let i = 0; i < res.length; i++){
+        let pessoa = {}
+        pessoa.id = res[i].login
+        pessoa.title = res[i].login
+        pessoa.image = res[i].avatar_url
+        pessoas.push(pessoa)
+      }
+    }).catch((err)=>{
+      console.log(err)
     })
+    
     setPessoas(pessoas)
   }
 
