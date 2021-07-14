@@ -2,8 +2,9 @@ import React, { Fragment, useState, useEffect } from 'react';
 import Box from '../src/components/Box';
 import MainGrid from '../src/components/Maingrid';
 import { AlurakutMenu, OrkutNostalgicIconSet, AlurakutProfileSidebarMenuDefault } from '../src/lib/AlurakutCommons';
-import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations'
 import axios from 'axios';
+import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations'
+import ImageCardList from '../src/components/ImageCardList';
 
 function ProfileSideBar(props){
   return(
@@ -33,10 +34,16 @@ export default function Home(){
   const githubUser = "ChristianSpinelli"
 
   async function loadPessoas(githubUser){
-    let pessoas
+    let pessoas = []
     await axios.get(`https://api.github.com/users/${githubUser}/following`)
     .then((res)=>{
-        pessoas = res.data
+        for(let i = 0; i < res.data.length; i++){
+            let pessoa = {}
+            pessoa.id = res.data[i].login
+            pessoa.title = res.data[i].login
+            pessoa.image = res.data[i].avatar_url
+            pessoas.push(pessoa)
+        }
     })
     setPessoas(pessoas)
   }
@@ -92,44 +99,16 @@ export default function Home(){
           </Box>
         </div>
         <div className="communityArea" style={{ gridArea:"communityArea"}}>
-          <ProfileRelationsBoxWrapper>
-            <h2 className="smallTitle">
-              Meus Amigos ({pessoas.length})
-            </h2>
-            <ul>
-            {pessoas.map((user)=>{
-              return(
-                <Fragment>
-                  <li key={user.login}>
-                    <a href={`/users/${user.login}`}>
-                      <img src={user.avatar_url}></img>
-                      <span>{user.login}</span>
-                    </a>
-                  </li>
-                </Fragment>
-              )
-            })}
-            </ul>
-          </ProfileRelationsBoxWrapper>
-          <ProfileRelationsBoxWrapper>
-            <h2 className="smallTitle">
-              Minhas Comunidades ({comunidades.length})
-            </h2>
-            <ul>
-            {comunidades.map((comunidade)=>{
-              return(
-                <Fragment>
-                  <li key={comunidade.id}>
-                    <a href={`/comunidades/${comunidade.title}`}>
-                      <img src={comunidade.image}></img>
-                      <span>{comunidade.title}</span>
-                    </a>
-                  </li>
-                </Fragment>
-              )
-            })}
-            </ul>
-          </ProfileRelationsBoxWrapper>
+          <ImageCardList
+            list={pessoas}
+            title="Meus Amigos"
+            path="usuarios"
+          />
+          <ImageCardList 
+            list={comunidades} 
+            title="Minhas Comunidades" 
+            path="comunidades"
+          />
         </div>    
       </MainGrid>
     </Fragment>
