@@ -3,7 +3,6 @@ import Box from '../src/components/Box';
 import MainGrid from '../src/components/Maingrid';
 import { AlurakutMenu, OrkutNostalgicIconSet, AlurakutProfileSidebarMenuDefault } from '../src/lib/AlurakutCommons';
 import axios from 'axios';
-import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations'
 import ImageCardList from '../src/components/ImageCardList';
 
 function ProfileSideBar(props){
