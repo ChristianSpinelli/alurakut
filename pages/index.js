@@ -100,11 +100,26 @@ export default function Home(){
             <form onSubmit={(e) => { 
               e.preventDefault()
               const dadosForm = new FormData(e.target)
-              setComunidades([...comunidades, {
-                id:new Date().toISOString(),
+              
+             const comunidade = {
                 title:dadosForm.get("title"), 
-                image:dadosForm.get("image")
-              }])
+                imageUrl:dadosForm.get("image"),
+                creatorId:githubUser
+              }
+
+              fetch('api/comunidade',{
+                method: "POST",
+                headers:{
+                  'Content-type':'application/json'
+                },
+                body: JSON.stringify(comunidade)
+              })
+              .then(async (response) => {
+                const data = await response.json();
+                let auxComunidades = [...comunidades, data.comunidade]
+                setComunidades(auxComunidades)
+              })
+              
             }}>
               <div>
                 <input 
