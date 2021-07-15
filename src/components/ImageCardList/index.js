@@ -12,8 +12,8 @@ function ImageCardList({title, list, path}){
                 return(
                 <Fragment>
                     <li key={item.id}>
-                        <a href={`/${path}/${item.title}`}>
-                            <img src={item.image}></img>
+                        <a href={`/${path}/${item.id}`}>
+                            <img src={item.imageUrl}></img>
                             <span>{item.title}</span>
                         </a>
                     </li>

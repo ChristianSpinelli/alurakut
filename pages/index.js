@@ -21,14 +21,8 @@ function ProfileSideBar(props){
 }
 
 export default function Home(){
-  const [ comunidades, setComunidades ] =  useState([{
-    id:'2918912202108',
-    title:"Eu odeio acordar cedo", 
-    image:"https://alurakut.vercel.app/capa-comunidade-01.jpg"}
-  ])
-
+  const [ comunidades, setComunidades ] =  useState([])
   const [ pessoas, setPessoas ] = useState([])
-
   const githubUser = "ChristianSpinelli"
 
   async function loadPessoas(githubUser){
@@ -44,7 +38,7 @@ export default function Home(){
         let pessoa = {}
         pessoa.id = res[i].login
         pessoa.title = res[i].login
-        pessoa.image = res[i].avatar_url
+        pessoa.imageUrl = res[i].avatar_url
         pessoas.push(pessoa)
       }
     }).catch((err)=>{
@@ -54,8 +48,37 @@ export default function Home(){
     setPessoas(pessoas)
   }
 
+  async function loadCommunities(){
+    await fetch("https://graphql.datocms.com/",{
+      method:"POST",
+      headers: {
+        'Authorization' : '1ece16f817ffaa45e87cac332a0c38',
+        'Content-Type' : 'application/json',
+        'Accept' : 'application/json'
+      },
+      body: JSON.stringify({ "query" : `query{
+        allCommunities{
+          title
+          id
+          imageUrl
+          creatorId
+        }
+      }` })
+    })
+    .then((res) => {
+      return res.json()
+    })
+    .then((res) => {
+      setComunidades(res.data.allCommunities)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }
+
   useEffect(()=>{
     loadPessoas(githubUser)
+    loadCommunities()
   },[])
     
   return (
